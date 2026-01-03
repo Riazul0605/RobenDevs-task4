@@ -1,0 +1,25 @@
+# ---------- Build stage ----------
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy package.json & package-lock.json first
+COPY backend/package*.json ./
+RUN npm ci               # installs dependencies
+
+# Copy source code
+COPY backend/ .
+# Optional build step for transpilers
+# RUN npm run build || echo "no build step"
+
+# ---------- Runtime stage ----------
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy everything from builder including node_modules
+COPY --from=builder /app /app
+
+EXPOSE 4000
+
+CMD ["node", "src/index.js"]

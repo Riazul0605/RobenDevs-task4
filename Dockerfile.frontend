@@ -1,0 +1,19 @@
+# ---------- Builder ----------
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# Copy only package files first (for caching)
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+
+# Copy all source files (including index.html)
+COPY frontend/ .
+
+# Build Vite project
+RUN npm run build
+
+# ---------- Runtime ----------
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

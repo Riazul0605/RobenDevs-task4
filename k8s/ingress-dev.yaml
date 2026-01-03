@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dev-ingress
+  namespace: dev
+spec:
+  ingressClassName: nginx   # Must match NGINX ingress class in Minikube
+  rules:
+    - http:
+        paths:
+          # Frontend route
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+          # Backend API route
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 4000
