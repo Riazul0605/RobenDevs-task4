@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       # --- Backend ---
       - name: Setup Node.js for backend
@@ -86,10 +86,10 @@ jobs:
           echo "IMAGE_TAG=$BRANCH_NAME-$SHORT_SHA" >> $GITHUB_ENV
 
       - name: Build backend image
-        run: docker build -f Dockerfile.backend -t $IMAGE_BACKEND:${IMAGE_TAG} backend
+        run: docker build -f Dockerfile.backend -t $IMAGE_BACKEND:${IMAGE_TAG} .
 
       - name: Build frontend image
-        run: docker build -f Dockerfile.frontend -t $IMAGE_FRONTEND:${IMAGE_TAG} frontend
+        run: docker build -f Dockerfile.frontend -t $IMAGE_FRONTEND:${IMAGE_TAG} .
 
       - name: Push backend image
         run: docker push $IMAGE_BACKEND:${IMAGE_TAG}
