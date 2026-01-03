@@ -4,11 +4,12 @@ WORKDIR /app
 
 # Copy only package files first (for caching)
 COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
+RUN npm install
 
 # Copy all source files (including index.html)
 COPY frontend/ .
 
+RUN chmod +x node_modules/.bin/vite
 # Build Vite project
 RUN npm run build
 
