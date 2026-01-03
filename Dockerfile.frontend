@@ -9,7 +9,8 @@ RUN npm install
 # Copy all source files (including index.html)
 COPY frontend/ .
 
-RUN chmod +x node_modules/.bin/vite
+RUN chmod +x node_modules/.bin/vite \
+    && chmod +x node_modules/@esbuild/linux-x64/bin/esbuild
 # Build Vite project
 RUN npm run build
 
